@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    service: "lp"
+  name: "lp"
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        service: "lp"
+    spec:
+      containers:
+      - image: "{{docker-registry}}/lp:{{version}}"
+        name: "lp"
+        ports:
+        - containerPort: 8050
+        resources: {}
+        volumeMounts:
+          - mountPath: /usr/share/
+            name: lp-pv-storage
+      restartPolicy: Always
+      volumes:
+        - name: lp-pv-storage
+          persistentVolumeClaim:
+            claimName: maana-lp-service-db-claim

@@ -1,0 +1,78 @@
+#
+#
+#  Data Types
+#
+#
+
+
+type LpVariable {
+    id: ID!
+    desc: String
+    isInteger: Boolean!
+    isBinary: Boolean!
+    lowerBound: Float
+    upperBound: Float
+}
+
+type LpOperand {
+    id: ID!
+    lpVar: LpVariable!
+    coef: Float!
+}
+
+type LpExpression {
+    id: ID!
+    desc: String
+    expr: [LpOperand!]!
+}
+
+type LpConstraint {
+    id: ID!
+    desc: String
+    expr: LpExpression!
+    type: String!
+    value: Float
+}
+
+type LpObjective {
+    id: ID!
+    desc: String
+    expr: LpExpression!
+    isMaximize: Boolean!
+}
+
+type LpProblem {
+    id: ID!
+    desc: String
+    objective: LpObjective!
+    constraints: [LpConstraint!]!
+}
+
+type LpVariableValue {
+    id: ID!
+    variable: LpVariable!
+    value: Float!
+}
+
+type LpConstraintValue {
+    id: ID!
+    constraint: LpConstraint!
+    value: Float!
+}
+
+type LpObjectiveValue {
+    id: ID!
+    objective: LpObjective!
+    value: Float!
+}
+
+type LpSolution {
+    id: ID!
+    problemID: ID!
+    problemDesc: String
+    solutionExists: Boolean!
+    solverStatus: String!
+    objectiveValue: LpObjectiveValue
+    variableValues: [LpVariableValue!]!
+    constraintValues: [LpConstraintValue!]!
+}

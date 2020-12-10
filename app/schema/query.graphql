@@ -1,0 +1,72 @@
+
+
+schema {
+  query: Query
+}
+
+
+
+input LpVariableInput {
+    id: ID!
+    desc: String
+    isInteger: Boolean!
+    isBinary: Boolean!
+    lowerBound: Float
+    upperBound: Float
+}
+
+input LpOperandInput {
+    id: ID!
+    lpVar: LpVariableInput!
+    coef: Float!
+}
+
+input LpExpressionInput {
+    id: ID!
+    desc: String
+    expr: [LpOperandInput!]!
+}
+
+input LpConstraintInput {
+    id: ID!
+    desc: String
+    expr: LpExpressionInput!
+    type: String!
+    value: Float
+}
+
+input LpObjectiveInput {
+    id: ID!
+    desc: String
+    expr: LpExpressionInput!
+    isMaximize: Boolean!
+}
+
+input LpProblemInput {
+    id: ID!
+    desc: String
+    objective: LpObjectiveInput!
+    constraints: [LpConstraintInput!]!
+}
+
+
+
+type Query {
+    solve(problem: LpProblemInput!): LpSolution!,
+
+    initLPProblem(probID: ID!, probDesc: String): LpProblem!,
+    setObjective(problem: LpProblemInput!, objective: LpObjectiveInput!): LpProblem!,
+
+    binaryVariable(varID: ID!, desc: String): LpVariable!
+
+    addConstraint(problem: LpProblemInput!, constraint: LpConstraintInput!): LpProblem!,
+    addConstraints(problem: LpProblemInput!, constraints: [LpConstraintInput!]!): LpProblem!,
+
+    createLpExpression(variable: LpVariableInput!, coef: Float!, desc: String): LpExpression!,
+    addExpressions(addThis: LpExpressionInput!, toThis: LpExpressionInput!): LpExpression!,
+
+    createGEConstraint(expr: LpExpressionInput!, constraintValue: Float!, desc: String): LpConstraint!
+    createLEConstraint(expr: LpExpressionInput!, constraintValue: Float!, desc: String): LpConstraint!
+    createEQConstraint(expr: LpExpressionInput!, constraintValue: Float!, desc: String): LpConstraint!
+}
+
