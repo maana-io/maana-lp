@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
@@ -6,6 +6,9 @@ metadata:
   name: "lp"
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      service: "lp"
   strategy: {}
   template:
     metadata:
@@ -18,11 +21,11 @@ spec:
         ports:
         - containerPort: 8050
         resources: {}
-        volumeMounts:
-          - mountPath: /usr/share/
-            name: lp-pv-storage
+#        volumeMounts:
+#          - mountPath: /usr/share/
+#            name: lp-pv-storage
       restartPolicy: Always
-      volumes:
-        - name: lp-pv-storage
-          persistentVolumeClaim:
-            claimName: maana-lp-service-db-claim
+#      volumes:
+#        - name: lp-pv-storage
+#          persistentVolumeClaim:
+#            claimName: maana-lp-service-db-claim
