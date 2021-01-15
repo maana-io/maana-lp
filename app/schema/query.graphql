@@ -53,6 +53,7 @@ input LpProblemInput {
 
 type Query {
     solve(problem: LpProblemInput!): LpSolution!,
+    solveBigProblem(problem: String!): String!,
 
     initLPProblem(probID: ID!, probDesc: String): LpProblem!,
     setObjective(problem: LpProblemInput!, objective: LpObjectiveInput!): LpProblem!,

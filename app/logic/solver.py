@@ -1,4 +1,6 @@
 import uuid
+import json
+from datetime import datetime
 from pulp import *
 from app.settings import LP_DATA_DIR
 from pathlib import Path
@@ -23,7 +25,26 @@ def addConstraints(problem, constraints):
     return problem
 
 
+
+def solveBigProblem(jsonProblem):
+    solverStart = datetime.now()
+    print('LPSolver receive a problem of size {} at {}'.format(len(jsonProblem), solverStart))
+
+    prob = json.loads(jsonProblem)
+    print('Problem loaded, took {}'.format(datetime.now() - solverStart))
+
+    sol = solve(prob)
+    jsonSol = json.dumps(sol)
+
+    print('Problem solved, total time {}, finished at {}'.format(datetime.now() - solverStart, datetime.now()))
+    return jsonSol
+
+
+
 def solve(problem):
+    solverStart = datetime.now()
+    print('LPSolver started at {}'.format(solverStart))
+
     #problem
     p = LpProblem(problem['id'], LpMaximize if problem['objective']['isMaximize'] else LpMinimize)
 
@@ -88,4 +109,6 @@ def solve(problem):
                 'value': value(constraint_exprs[c['id']])
             } for c in problem['constraints']]
     }
+
+    print('LPSolver took {}, finished at {}'.format(datetime.now() - solverStart, datetime.now()))
     return sol

@@ -5,6 +5,7 @@ from app.logic.solver import *
 resolvers = {
     'Query': {
         'solve': lambda value, info, **args: solve(args['problem']),
+        'solveBigProblem': lambda value, info, **args: solveBigProblem(args['problem']),
         'initLPProblem': lambda value, info, **args: {
             'id': args['probID'],
             'desc': args.get('probDesc', None),
